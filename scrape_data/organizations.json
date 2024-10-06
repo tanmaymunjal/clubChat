@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Level 7",
+        "description": "Our group is dedicated to reducing plastic waste and promoting action driven change. We are working to create a fully functional plastic recycling and manufacturing center at the University of Alberta.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/level7",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/f49b745d-7761-4c8b-b0b9-03f3e6c129e70d40538e-08a1-469e-b5be-4029454cc6f8.png?preset=small-sq"
+    },
+    {
+        "name": "UASU Audit Committee",
+        "description": "The committee is responsible for reviewing all Students' Union and Student Group financial statements, credit card expenditures, election results, and alterations to the Students' Union budget.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/audit",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/ba329d8f-82ce-4644-abd7-86ed3890c3cfc9654b05-6ce6-4050-81a9-4fbfcb0ec7aa.jpg?preset=small-sq"
+    },
+    {
+        "name": "5 Days for the Homeless",
+        "description": "5 Days for the Homeless is a student-led campaign with a mission to raise awareness and donations for Youth Empowerment and Support Services (YESS), a local charity focused on youth homelessness prevention and support for homeless youth.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/5days",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/7ba5ca1d-cd62-4995-b1d1-42279e07d753652c69fd-90df-4210-ae04-b54a5fc00036.png?preset=small-sq"
+    },
+    {
+        "name": "ABBEDAM",
+        "description": "ABBEDAM Productions is an extra-curricular production company made up of a majority of BA, BA (Honours), BEd, and MA drama students. Our mandate is to produce a student run production in the Second Playing Space of the Timms Centre, annually.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/abbedam",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/7b34423f-42c5-4983-9d2f-b71122546fb25db257a5-d957-4cca-9d17-d0038481211e.jpg?preset=small-sq"
+    },
+    {
+        "name": "Active Minds at University of Alberta",
+        "description": "Active Minds is a student led mental health awareness and advocacy group that is established for the expressed purposes of, and exists on campus to spread awareness about Mental Health through a variety of campus wide events, programs and initiatives.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/activemindsuofa",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/baa097eb-2593-4b9c-af51-064fff7df2b88be3e5aa-f85b-4cb7-8826-1c105846154b.png?preset=small-sq"
+    },
+    {
+        "name": "Advocating for Children's Education",
+        "description": "ACE believes in education for all. We provide educational tools and resources to schools & local organizations and emphasize the importance of education in every child's life. Follow us on instagram: @ace_ualberta",
+        "link": "https://alberta.campuslabs.ca/engage/organization/ace",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/80295dae-10d8-42b6-a185-953a0259c6831983f24a-7769-408c-9548-c2c88eceecc0.png?preset=small-sq"
+    },
+    {
+        "name": "Agricultural, Food and Nutritional Science Graduate Student's Association",
+        "description": "The Agricultural, Food and Nutritional Science Graduate Student's Association (AFNS GSA) is a representative body of all graduate students in the Department of Agricultural, Food and Nutritional Science.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/afnsgasa",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/b8aec202-a09e-4701-8c80-5d547de78790ff9f9926-b69a-4208-a221-848d45cb9cd1.png?preset=small-sq"
+    },
+    {
+        "name": "Agricultural, Life and Environmental Sciences Graduate Students' Association",
+        "description": "ALES GSA exists at the University of Alberta for the purpose of promoting its mission and goals and providing graduate students and post-docs with the opportunity for involvement, leadership, service, and professional experience.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/alesgsa",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/b2c2fba6-1d66-4509-b4e4-85af87b3ed4fd03558f8-3737-4523-8b2a-9c420a7d1b27.png?preset=small-sq"
+    },
+    {
+        "name": "Ahmadiyya Muslim Students' Association",
+        "description": "The student branch of the Ahmadiyya Muslim Community in Edmonton.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/amsa",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/dbb9d730-78d8-44ab-804b-217f42f74f2304cf099c-d84f-4d4e-a179-9a0da730b6be.png?preset=small-sq"
+    },
+    {
+        "name": "AIESEC in Edmonton",
+        "description": "AIESEC in Edmonton is a local chapter of the world's largest youth-run non-profit organization. We facilitate leadership development in youth through social volunteerships and paid professional internships.",
+        "link": "https://alberta.campuslabs.ca/engage/organization/aiesec",
+        "image_url": "https://se-images.campuslabs.ca/clink/images/2bf12124-4d67-461e-966e-8fc90a0229e9c35ed093-0927-4d54-b65f-3e9dd75483b7.png?preset=small-sq"
+    }
+]
