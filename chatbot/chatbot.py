@@ -15,7 +15,7 @@ def load_clubs_data(file_path: str) -> List[Dict]:
 
 
 # Load the JSON data from a file
-clubs_data = load_clubs_data("../scrape_data/all_organizations.json")
+clubs_data = load_clubs_data("all_organizations.json")
 
 # Prepare the data for embedding
 texts = [f"{club['name']}: {club['description']}" for club in clubs_data]
