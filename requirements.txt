@@ -3,3 +3,7 @@ selenium
 webdriver_manager
 streamlit
 openai
+langchain-community
+tiktoken
+faiss-cpu
+langchain-openai
