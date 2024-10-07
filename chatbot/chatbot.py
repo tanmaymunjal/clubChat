@@ -78,14 +78,13 @@ def get_club_info(query: str, history: List[Dict[str, str]] = None) -> str:
                         
                         [Your description and recommendation about the club]
                         
-                        This formatting will allow the chat interface to properly display images and clickable links.Make sure to format the image link such that the
+                        This formatting will allow the chat interface to properly display images and clickable links. Make sure to format the image link such that the
                         image is visible on something like streamlit interface!""",
         },
         {
             "role": "user",
             "content": f"Based on the following information about clubs and organizations, please answer the user's question: {context}",
         },
-        {"role": "user", "content": query},
     ]
 
     # Add conversation history if provided
@@ -93,10 +92,13 @@ def get_club_info(query: str, history: List[Dict[str, str]] = None) -> str:
         for message in history:
             messages.append({"role": message["role"], "content": message["content"]})
 
+    # Add the current query to the messages
+    messages.append({"role": "user", "content": query})
+
     # Get the response from OpenAI
     response = client.chat.completions.create(
         model="gpt-4", messages=messages, stream=True
     )
 
     for chunk in response:
-        yield chunk
+            yield chunk
