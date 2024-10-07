@@ -3,7 +3,9 @@ selenium
 webdriver_manager
 streamlit
 openai
-langchain-community
-tiktoken
+numpy 
+scikit-learn
+black
 faiss-cpu
-langchain-openai
+langchain_openai
+langchain_community

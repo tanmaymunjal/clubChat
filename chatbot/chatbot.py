@@ -1,20 +1,21 @@
 import json
 from typing import List, Dict
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from openai import OpenAI
+from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-from langchain.schema import HumanMessage, AIMessage
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import streamlit as st
+
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
 
 # Function to load JSON data from a file
 def load_clubs_data(file_path: str) -> List[Dict]:
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         return json.load(file)
 
+
 # Load the JSON data from a file
-clubs_data = load_clubs_data('../scrape_data/all_organizations.json')
+clubs_data = load_clubs_data("../scrape_data/all_organizations.json")
 
 # Prepare the data for embedding
 texts = [f"{club['name']}: {club['description']}" for club in clubs_data]
@@ -25,38 +26,41 @@ embeddings = OpenAIEmbeddings(openai_api_key=st.secrets["OPENAI_API_KEY"])
 # Create a vector store
 vector_store = FAISS.from_texts(texts, embeddings)
 
-# Initialize the language model with streaming
-llm = ChatOpenAI(
-    temperature=0,
-    streaming=True,
-    callbacks=[StreamingStdOutCallbackHandler()],
-    openai_api_key=st.secrets["OPENAI_API_KEY"]
-)
 
-# Set up the conversational memory
-memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+# Function to find most similar texts using FAISS
+def find_most_similar_texts(query: str, top_k: int = 5) -> List[str]:
+    similar_docs = vector_store.similarity_search(query, k=top_k)
+    return [doc.page_content for doc in similar_docs]
 
-# Create the conversational chain
-qa_chain = ConversationalRetrievalChain.from_llm(
-    llm,
-    retriever=vector_store.as_retriever(),
-    memory=memory,
-    verbose=True
-)
 
 def get_club_info(query: str, history: List[Dict[str, str]] = None) -> str:
-    if history:
-        # Convert history to the format expected by ConversationBufferMemory
-        formatted_history = []
-        for message in history:
-            print(message)
-            if message['role'] == 'user':
-                formatted_history.append(HumanMessage(content=message['content']))
-            elif message['role'] == 'assistant':
-                formatted_history.append(AIMessage(content=message['content']))
-        
-        # Update the conversation memory with the provided history
-        memory.chat_memory.messages = formatted_history
+    # Find most relevant texts
+    relevant_texts = find_most_similar_texts(query)
 
-    result = qa_chain({"question": query})
-    return result['answer']
+    # Prepare the messages for the chat completion
+    messages = [
+        {
+            "role": "system",
+            "content": """You are a helpful assistant that provides information about clubs and organizations to uAlberta student.A lot of them have been feeling very lonely
+                        recently and your goal is to help. uAlberta is a commuter school and it can be very hard to make friends or socialize unless you are very active in the community
+                        and join clubs that interest you! Please help these poeple get out and become their best self!""",
+        },
+        {
+            "role": "user",
+            "content": f"Based on the following information about clubs and organizations, please answer the user's question: {' '.join(relevant_texts)}",
+        },
+        {"role": "user", "content": query},
+    ]
+
+    # Add conversation history if provided
+    if history:
+        for message in history:
+            messages.append({"role": message["role"], "content": message["content"]})
+
+    # Get the response from OpenAI
+    response = client.chat.completions.create(
+        model="gpt-4", messages=messages, stream=True
+    )
+
+    for chunk in response:
+        yield chunk
