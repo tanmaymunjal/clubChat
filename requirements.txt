@@ -9,3 +9,4 @@ black
 faiss-cpu
 langchain_openai
 langchain_community
+streamlit-extras
