@@ -27,8 +27,33 @@ embeddings = OpenAIEmbeddings(openai_api_key=st.secrets["OPENAI_API_KEY"])
 vector_store = FAISS.from_texts(texts, embeddings)
 
 
-# Function to find most similar texts using FAISS
-def find_most_similar_texts(query: str, top_k: int = 5) -> List[Dict]:
+def extract_sub_queries(query: str, history: List[Dict[str, str]] = None) -> List[str]:
+    # Prepare the conversation history
+    conversation = ""
+    if history:
+        for message in history:
+            conversation += f"{message['role'].capitalize()}: {message['content']}\n"
+
+    conversation += f"Human: {query}\n"
+    # Use GPT to extract relevant keywords and phrases for vector search
+    messages = [
+        {
+            "role": "system",
+            "content": "You are an AI assistant that extracts relevant keywords and phrases for searching university clubs and organizations. Focus on extracting terms that might appear in club names or descriptions. Consider the entire conversation context when extracting search terms.Please make sure to look at last human query and be very relevant to that. Also you allowed to output nothing if the conversation does not need some club info right now.",
+        },
+        {
+            "role": "user",
+            "content": f"Given the following conversation, extract relevant search terms for finding university clubs and organizations. Provide only the search terms, separated by newlines. Keep terms concise and relevant to club names or activities.\n\nConversation:\n{conversation}",
+        },
+    ]
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo", messages=messages, max_tokens=100
+    )
+    sub_queries = response.choices[0].message.content.strip().split("\n")
+    return [sq.strip() for sq in sub_queries if sq.strip()]
+
+
+def find_most_similar_texts(query: str, top_k: int = 3) -> List[Dict]:
     similar_docs = vector_store.similarity_search(query, k=top_k)
     results = []
     for doc in similar_docs:
@@ -48,13 +73,25 @@ def find_most_similar_texts(query: str, top_k: int = 5) -> List[Dict]:
     return results
 
 
-def get_club_info(query: str, history: List[Dict[str, str]] = None) -> str:
-    # Find most relevant texts
-    relevant_texts = find_most_similar_texts(query)
+def get_club_info(query: str, history: List[Dict[str, str]] = None):
+    # Extract search terms (subqueries) from the main query and conversation history
+    search_terms = extract_sub_queries(query, history)
 
-    # Prepare the context with club information, including links and images
+    # Find relevant texts for each search term
+    all_relevant_texts = []
+    for term in search_terms:
+        relevant_texts = find_most_similar_texts(term)
+        all_relevant_texts.extend(relevant_texts)
+
+    # Remove duplicates while preserving order
+    seen = set()
+    unique_relevant_texts = [
+        x for x in all_relevant_texts if not (x["name"] in seen or seen.add(x["name"]))
+    ]
+
+    # Prepare the context with club information
     context = ""
-    for text in relevant_texts:
+    for text in unique_relevant_texts:
         context += f"{text['content']}\n"
         context += f"Club Name: {text['name']}\n"
         context += f"Club Link: {text['link']}\n"
@@ -78,12 +115,7 @@ def get_club_info(query: str, history: List[Dict[str, str]] = None) -> str:
                         
                         [Your description and recommendation about the club]
                         
-                        This formatting will allow the chat interface to properly display images and clickable links. Make sure to format the image link such that the
-                        image is visible on something like streamlit interface!""",
-        },
-        {
-            "role": "user",
-            "content": f"Based on the following information about clubs and organizations, please answer the user's question: {context}",
+                        This formatting will allow the chat interface to properly display images and clickable links.""",
         },
     ]
 
@@ -92,8 +124,13 @@ def get_club_info(query: str, history: List[Dict[str, str]] = None) -> str:
         for message in history:
             messages.append({"role": message["role"], "content": message["content"]})
 
-    # Add the current query to the messages
-    messages.append({"role": "user", "content": query})
+    # Add the current query and context to the messages
+    messages.append(
+        {
+            "role": "user",
+            "content": f"Based on the following information about clubs and organizations, please answer the user's question: {context}\n\nUser's query: {query}",
+        }
+    )
 
     # Get the response from OpenAI
     response = client.chat.completions.create(
@@ -101,4 +138,4 @@ def get_club_info(query: str, history: List[Dict[str, str]] = None) -> str:
     )
 
     for chunk in response:
-            yield chunk
+        yield chunk
