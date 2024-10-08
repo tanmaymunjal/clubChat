@@ -79,7 +79,7 @@ def get_club_info(query: str, history: List[Dict[str, str]] = None):
 
     # Find relevant texts for each search term
     all_relevant_texts = []
-    for term in search_terms:
+    for term in search_terms[:5]:
         relevant_texts = find_most_similar_texts(term)
         all_relevant_texts.extend(relevant_texts)
 
